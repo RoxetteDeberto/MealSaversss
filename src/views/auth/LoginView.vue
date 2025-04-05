@@ -11,7 +11,7 @@ function onClick() {
 <template>
   <v-responsive class="border rounded">
     <v-app :theme="theme">
-      <v-app-bar class="px-3">
+      <v-app-bar class="px-3" color="brown-lighten-1">
         <v-spacer></v-spacer>
 
         <v-btn
@@ -24,9 +24,40 @@ function onClick() {
 
       <v-main>
         <v-container>
-          <h1>Main Content</h1>
+          <v-row>
+            <v-col cols="12" md="6" class="mx-auto">
+              <v-card
+                class="mx-auto"
+                prepend-icon="mdi-account"
+                subtitle="Login or Register"
+                color="red-lighten-1"
+              >
+                <template v-slot:title>
+                  <span class="font-weight-black">MealSavers</span>
+                </template>
+
+                <v-card-text class="bg-surface-light pt-4">
+                  <v-sheet class="mx-auto" width="300">
+                    <v-form fast-fail @submit.prevent>
+                      <v-text-field label="Email" variant="outlined"></v-text-field>
+
+                      <v-text-field
+                        label="Password"
+                        type="password"
+                        variant="outlined"
+                      ></v-text-field>
+
+                      <v-btn class="mt-2" type="submit" block>Submit</v-btn>
+                    </v-form>
+                  </v-sheet>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-container>
       </v-main>
+
+      <v-footer color="brown-lighten-1" border app>2025 - MealSavers</v-footer>
     </v-app>
   </v-responsive>
 </template>
