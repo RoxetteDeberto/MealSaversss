@@ -12,11 +12,7 @@ const { mobile } = useDisplay()
         <v-col cols="12" md="6" class="mx-auto">
           <v-card class="mx-auto" image="/images/bg-card.jpg" elevation="10">
             <v-card-title class="text-center">
-              <v-img
-                class="mx-auto"
-                src="/public/final-logo.png"
-                :width="mobile ? '75%' : '25%'"
-              ></v-img>
+              <v-img class="mx-auto" src="/final-logo.png" :width="mobile ? '75%' : '25%'"></v-img>
               <h3 class="font-weight-black">MealSavers</h3>
               <p>Login or Sign up</p>
             </v-card-title>
