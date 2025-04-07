@@ -1,71 +1,55 @@
 <script setup>
-import { ref } from 'vue'
+import AppLayout from '@/components/layout/AppLayout.vue'
+import { useDisplay } from 'vuetify'
 
-const theme = ref('light')
-
-function onClick() {
-  theme.value = theme.value === 'light' ? 'dark' : 'light'
-}
+const { mobile } = useDisplay()
 </script>
 
 <template>
-  <v-responsive class="border rounded">
-    <v-app :theme="theme">
-      <v-app-bar class="px-3" color="brown-lighten-1">
-        <v-spacer></v-spacer>
-
-        <v-btn
-          :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-          text="Toggle Theme"
-          slim
-          @click="onClick"
-        ></v-btn>
-      </v-app-bar>
-
-      <v-main>
-        <v-container>
-          <v-row>
-            <v-col cols="12" md="6" class="mx-auto">
-              <v-card
+  <AppLayout>
+    <template #content>
+      <v-row>
+        <v-col cols="12" md="6" class="mx-auto">
+          <v-card class="mx-auto" image="/images/bg-card.jpg" elevation="10">
+            <v-card-title class="text-center">
+              <v-img
                 class="mx-auto"
-                prepend-icon="mdi-login"
-                subtitle="Login"
-                image="/images/bg-card.jpg"
-                elevation="10"
-              >
-                <template v-slot:title>
-                  <span class="font-weight-black">MealSavers</span>
-                </template>
+                src="/public/final-logo.png"
+                :width="mobile ? '75%' : '25%'"
+              ></v-img>
+              <h3 class="font-weight-black">MealSavers</h3>
+              <p>Login or Sign up</p>
+            </v-card-title>
 
-                <v-card-text class="bg-surface-light pt-4">
-                  <v-sheet class="mx-auto" width="300">
-                    <v-form fast-fail @submit.prevent>
-                      <v-text-field label="Email" variant="outlined"></v-text-field>
+            <v-card-text class="bg-surface-light pt-4">
+              <v-divider class="my-5"></v-divider>
+              <v-sheet class="mx-auto" width="300">
+                <v-form fast-fail @submit.prevent>
+                  <v-text-field label="Email" variant="outlined"></v-text-field>
 
-                      <v-text-field
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                      ></v-text-field>
+                  <v-text-field label="Password" type="password" variant="outlined"></v-text-field>
 
-                      <v-btn class="mt-2" type="submit" block>Submit</v-btn>
-                    </v-form>
-                    <v-divider class="my-5"></v-divider>
-                    <h5 class="text-center">
-                      Don't have an account?
-                      <RouterLink class="text-primary" to="/register"
-                        ><u> Click here to Register</u></RouterLink
-                      >
-                    </h5>
-                  </v-sheet>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-main>
-
-      <v-footer color="brown-lighten-1" border app>2025 - MealSavers</v-footer>
-    </v-app>
-  </v-responsive>
+                  <v-btn
+                    class="mt-2"
+                    type="submit"
+                    block
+                    color="red-darken-1"
+                    prepend-icon="mdi-login"
+                    >Login</v-btn
+                  >
+                </v-form>
+                <v-divider class="my-5"></v-divider>
+                <h5 class="text-center">
+                  Don't have an account?
+                  <RouterLink class="text-primary" to="/register"
+                    ><u> Click here to Register</u></RouterLink
+                  >
+                </h5>
+              </v-sheet>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row></template
+    >
+  </AppLayout>
 </template>
