@@ -39,9 +39,9 @@ const { mobile } = useDisplay()
                   >
                 </v-form>
                 <v-divider class="my-5"></v-divider>
-                <h5 class="text-center">
+                <h5 class="text-center mb-5">
                   Don't have an account?
-                  <RouterLink class="text-primary" to="/register"
+                  <RouterLink class="text-danger font-weight-black" to="/register"
                     ><u> Click here to Register</u></RouterLink
                   >
                 </h5>
