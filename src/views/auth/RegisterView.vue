@@ -45,9 +45,11 @@ const { mobile } = useDisplay()
                     >Register</v-btn
                   >
                   <v-divider class="my-5"></v-divider>
-                  <h5 class="text-center">
+                  <h5 class="text-center mb-5">
                     Already have account?
-                    <RouterLink class="text-primary" to="/">Click here to Login</RouterLink>
+                    <RouterLink class="text-danger font-weight-black" to="/"
+                      >Click here to Login</RouterLink
+                    >
                   </h5>
                 </v-form>
               </v-sheet>
