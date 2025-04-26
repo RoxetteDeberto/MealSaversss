@@ -1,6 +1,14 @@
 <script setup>
 import { ref } from 'vue'
-import { requiredValidator, emailValidator, confirmedValidator } from '@/utils/validators'
+import AlertNotification from '@/components/common/AlertNotification.vue'
+
+import {
+  requiredValidator,
+  emailValidator,
+  passwordValidator,
+  confirmedValidator,
+} from '@/utils/validators'
+import { supabase, formActionDefault } from '@/utils/supabase.js'
 
 const refVForm = ref()
 const visible = ref(false)
@@ -18,8 +26,36 @@ const formData = ref({
   ...formDataDefault,
 })
 
-const onSubmit = () => {
-  alert(formData.value.email)
+const formAction = ref({
+  ...formActionDefault,
+})
+
+const onSubmit = async () => {
+  formAction.value = { ...formActionDefault }
+  formAction.value.formProcess = true
+
+  const { data, error } = await supabase.auth.signUp({
+    email: formData.value.email,
+    password: formData.value.password,
+    options: {
+      data: {
+        firstname: formData.value.firstname,
+        lastname: formData.value.lastname,
+      },
+    },
+  })
+  if (error) {
+    console.log(error)
+    formAction.value.formErrorMessage = error.message
+    formAction.value.formStatus = error.status
+  } else if (data) {
+    console.log(data)
+    formAction.value.formSuccessMessage = 'Successfully Registered!'
+    // Add here more actions if you like
+    refVForm.value?.reset()
+  }
+
+  formAction.value.formProcess = false
 }
 
 const onFormSubmit = () => {
@@ -30,7 +66,12 @@ const onFormSubmit = () => {
 </script>
 
 <template>
-  <v-form ref="refVForm" @submit.prevent="onFormSubmit">
+  <AlertNotification
+    :form-success-message="formAction.formSuccessMessage"
+    :form-error-message="formAction.formErrorMessage"
+  >
+  </AlertNotification>
+  <v-form class="mt-5" ref="refVForm" @submit.prevent="onFormSubmit">
     <v-text-field
       v-model="formData.firstname"
       density="compact"
@@ -38,8 +79,9 @@ const onFormSubmit = () => {
       variant="outlined"
       :rules="[requiredValidator]"
     ></v-text-field>
+
     <v-text-field
-      v-model="formData.firstname"
+      v-model="formData.lastname"
       density="compact"
       label="Last Name"
       variant="outlined"
@@ -83,7 +125,14 @@ const onFormSubmit = () => {
       ]"
     ></v-text-field>
 
-    <v-btn class="mt-2" type="submit" block color="red-darken-1" prepend-icon="mdi-account-plus"
+    <v-btn
+      class="mt-2"
+      type="submit"
+      block
+      color="red-darken-1"
+      prepend-icon="mdi-account-plus"
+      :disabled="formAction.formProcess"
+      :loading="formAction.formProcess"
       >Register</v-btn
     >
   </v-form>
