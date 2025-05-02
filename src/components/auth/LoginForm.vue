@@ -29,7 +29,8 @@ const onFormSubmit = () => {
   <v-form ref="refVForm" @submit.prevent="onFormSubmit">
     <v-text-field
       v-model="formData.email"
-      label="Email Address"
+      placeholder="Email address"
+      label="Email"
       density="compact"
       prepend-inner-icon="mdi-email-outline"
       variant="outlined"
@@ -45,7 +46,8 @@ const onFormSubmit = () => {
       :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
       :type="visible ? 'text' : 'password'"
       density="compact"
-      label="Enter your password"
+      placeholder="Enter your password"
+      label="Password"
       prepend-inner-icon="mdi-lock-outline"
       variant="outlined"
       @click:append-inner="visible = !visible"
