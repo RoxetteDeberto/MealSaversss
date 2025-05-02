@@ -9,11 +9,14 @@ import {
   confirmedValidator,
 } from '@/utils/validators'
 import { supabase, formActionDefault } from '@/utils/supabase.js'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const refVForm = ref()
 const visible = ref(false)
 const isPassConfirmVisible = ref(false)
-
+// Load Variables
 const formDataDefault = {
   firstname: '',
   lastname: '',
@@ -29,9 +32,11 @@ const formData = ref({
 const formAction = ref({
   ...formActionDefault,
 })
-
+// Register Functionality
 const onSubmit = async () => {
+  // Register form Action utils
   formAction.value = { ...formActionDefault }
+  // turn on processing
   formAction.value.formProcess = true
 
   const { data, error } = await supabase.auth.signUp({
@@ -41,23 +46,29 @@ const onSubmit = async () => {
       data: {
         firstname: formData.value.firstname,
         lastname: formData.value.lastname,
+        is_admin: true,
       },
     },
   })
   if (error) {
+    // Add error message and status code
     console.log(error)
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
   } else if (data) {
+    // add success message
     console.log(data)
     formAction.value.formSuccessMessage = 'Successfully Registered!'
     // Add here more actions if you like
-    refVForm.value?.reset()
+    router.replace('/dashboard')
   }
-
+  // reset form
+  refVForm.value?.reset()
+  //  Turn of processing
   formAction.value.formProcess = false
 }
 
+// Trigger Validators
 const onFormSubmit = () => {
   refVForm.value?.validate().then(({ valid }) => {
     if (valid) onSubmit()
