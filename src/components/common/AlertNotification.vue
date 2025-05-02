@@ -1,5 +1,8 @@
 <script setup>
-const props = defineProps(['formSuccessMessage, formErrorMessage'])
+const props = defineProps({
+  formSuccessMessage: String,
+  formErrorMessage: String,
+})
 </script>
 
 <template>
