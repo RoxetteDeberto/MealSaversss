@@ -1,12 +1,10 @@
 import { supabase, formActionDefault } from '@/utils/supabase.js'
-// import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router' // Import useRouter
 
 export function useRegister() {
-  // Utilize pre-defined vue functions
-  // const router = useRouter()
+  const router = useRouter() // Initialize router
 
-  // Load Variables
   const formDataDefault = {
     firstname: '',
     lastname: '',
@@ -22,9 +20,7 @@ export function useRegister() {
   })
   const refVForm = ref()
 
-  // Register Functionality
   const onSubmit = async () => {
-    // Reset Form Action utils
     formAction.value = { ...formActionDefault, formProcess: true }
 
     const { data, error } = await supabase.auth.signUp({
@@ -34,30 +30,23 @@ export function useRegister() {
         data: {
           firstname: formData.value.firstname,
           lastname: formData.value.lastname,
-          is_admin: false, // Just turn to true if super admin account
-          // role: 'Administrator' // If role based; just change the string based on role
+          is_admin: false,
         },
       },
     })
 
     if (error) {
-      // Add Error Message and Status Code
       formAction.value.formErrorMessage = error.message
       formAction.value.formStatus = error.status
     } else if (data) {
-      // Add Success Message
       formAction.value.formSuccessMessage = 'Successfully Registered Account.'
-      // Redirect Acct to Dashboard
-      // router.replace('/dashboard')
+      router.replace('/dashboard') // Redirect to Dashboard
     }
 
-    // Reset Form
     refVForm.value?.reset()
-    // Turn off processing
     formAction.value.formProcess = false
   }
 
-  // Trigger Validators
   const onFormSubmit = () => {
     refVForm.value?.validate().then(({ valid }) => {
       if (valid) onSubmit()
