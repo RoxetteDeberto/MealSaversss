@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const theme = ref(localStorage.getItem('theme') ?? 'light')
 
 function onClick() {
@@ -7,12 +8,15 @@ function onClick() {
   localStorage.setItem('theme', theme.value)
 }
 </script>
+
 <template>
   <v-responsive>
     <v-app :theme="theme">
       <v-app-bar class="px-3" :color="theme === 'light' ? 'cyan-lighten-1' : 'cyan-darken-2'">
         <v-spacer></v-spacer>
-
+        <!-- Avatar slot -->
+        <slot name="avatar"></slot>
+        <!-- Theme toggle button -->
         <v-btn
           :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
           variant="elevated"
@@ -20,11 +24,9 @@ function onClick() {
           @click="onClick"
         ></v-btn>
       </v-app-bar>
-
       <v-main>
         <slot name="content"></slot>
       </v-main>
-
       <v-footer
         class="font-weight-bold"
         :color="theme === 'light' ? 'cyan-lighten-1' : 'cyan-darken-2'"
