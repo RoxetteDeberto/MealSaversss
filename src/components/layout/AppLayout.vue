@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const theme = ref(localStorage.getItem('theme') ?? 'light')
 
 // function onClick() {
@@ -7,6 +8,7 @@ const theme = ref(localStorage.getItem('theme') ?? 'light')
 //   localStorage.setItem('theme', theme.value)
 // }
 </script>
+
 <template>
   <v-responsive>
     <v-app :theme="theme">
@@ -20,7 +22,6 @@ const theme = ref(localStorage.getItem('theme') ?? 'light')
           @click="onClick"
         ></v-btn> -->
       </v-app-bar>
-
       <v-main>
         <slot name="content"></slot>
       </v-main>
