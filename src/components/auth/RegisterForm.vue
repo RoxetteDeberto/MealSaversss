@@ -19,7 +19,7 @@ const isPasswordConfirmVisible = ref(false)
   <AlertNotification
     :form-success-message="formAction.formSuccessMessage"
     :form-error-message="formAction.formErrorMessage"
-  ></AlertNotification>
+  />
 
   <v-form ref="refVForm" @submit.prevent="onFormSubmit">
     <v-row dense>
@@ -27,51 +27,66 @@ const isPasswordConfirmVisible = ref(false)
         <v-text-field
           v-model="formData.firstname"
           label="Firstname"
+          persistent-placeholder
+          hide-details="auto"
+          density="comfortable"
           :rules="[requiredValidator]"
-        ></v-text-field>
+        />
       </v-col>
 
       <v-col cols="12" sm="6">
         <v-text-field
           v-model="formData.lastname"
           label="Lastname"
+          persistent-placeholder
+          hide-details="auto"
+          density="comfortable"
           :rules="[requiredValidator]"
-        ></v-text-field>
+        />
       </v-col>
 
       <v-col cols="12">
         <v-text-field
           v-model="formData.email"
           label="Email"
+          persistent-placeholder
           prepend-inner-icon="mdi-email-outline"
+          hide-details="auto"
+          density="comfortable"
           :rules="[requiredValidator, emailValidator]"
-        ></v-text-field>
+        />
       </v-col>
 
       <v-col cols="12" sm="6">
         <v-text-field
           v-model="formData.password"
-          prepend-inner-icon="mdi-lock-outline"
           label="Password"
+          persistent-placeholder
+          prepend-inner-icon="mdi-lock-outline"
           :type="isPasswordVisible ? 'text' : 'password'"
           :append-inner-icon="isPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
           @click:append-inner="isPasswordVisible = !isPasswordVisible"
+          hide-details="auto"
+          density="comfortable"
           :rules="[requiredValidator, passwordValidator]"
-        ></v-text-field>
+        />
       </v-col>
 
       <v-col cols="12" sm="6">
         <v-text-field
           v-model="formData.password_confirmation"
           label="Password Confirmation"
+          persistent-placeholder
           :type="isPasswordConfirmVisible ? 'text' : 'password'"
           :append-inner-icon="isPasswordConfirmVisible ? 'mdi-eye-off' : 'mdi-eye'"
           @click:append-inner="isPasswordConfirmVisible = !isPasswordConfirmVisible"
+          hide-details="auto"
+          density="comfortable"
           :rules="[
             requiredValidator,
             confirmedValidator(formData.password_confirmation, formData.password),
           ]"
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
