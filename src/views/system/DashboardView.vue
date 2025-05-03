@@ -1,77 +1,62 @@
-<template>
-  <v-container fluid class="pa-0">
-    <!-- Header with background and mascot -->
-    <div class="header-section d-flex flex-column align-center justify-center">
-      <v-img src="https://your-mascot-image-url.png" max-width="150" class="mt-6" contain></v-img>
-      <h2 class="text-center font-weight-bold">MealSavers</h2>
-      <span class="text-center">Register Form</span>
-    </div>
+<script setup>
+import AppLayout from '@/components/layout/AppLayout.vue'
+// import { ref } from 'vue'
 
-    <!-- Register Form -->
-    <v-container class="form-container">
-      <v-card class="pa-4" elevation="3">
-        <v-row>
-          <v-col cols="12" sm="6">
-            <v-text-field label="Firstname" outlined dense />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field label="Lastname" outlined dense />
-          </v-col>
-        </v-row>
-
-        <v-text-field label="Email" prepend-inner-icon="mdi-email" type="email" outlined dense />
-
-        <v-row>
-          <v-col cols="12" sm="6">
-            <v-text-field
-              label="Password"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              outlined
-              dense
-            />
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field
-              label="Password Confirmation"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              outlined
-              dense
-            />
-          </v-col>
-        </v-row>
-
-        <v-btn color="red darken-3" class="white--text mt-4" block elevation="2">
-          <v-icon left>mdi-account-plus</v-icon>
-          REGISTER
-        </v-btn>
-
-        <div class="text-center mt-4">
-          <small>Already have an account? <a href="/login">Click here to Login</a></small>
-        </div>
-      </v-card>
-    </v-container>
-  </v-container>
-</template>
-
-<script>
-export default {
-  name: 'DashboardView',
+const user = {
+  initials: 'JD',
+  fullName: 'John Doe',
+  email: 'john.doe@doe.com',
 }
 </script>
 
-<style scoped>
-.header-section {
-  background-color: #00cfe8;
-  padding: 2rem 0;
-  background-image: url('/path-to-utensil-pattern.png');
-  background-size: cover;
-  background-repeat: repeat;
-}
+<template>
+  <AppLayout>
+    <template #avatar>
+      <v-menu min-width="200px">
+        <template v-slot:activator="{ props }">
+          <v-btn icon v-bind="props">
+            <v-avatar color="brown" size="large" class="me-5">
+              <span class="text-h5">{{ user.initials }}</span>
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-text>
+            <div class="mx-auto text-center">
+              <v-avatar color="brown" class="me-5">
+                <span class="text-h5">{{ user.initials }}</span>
+              </v-avatar>
+              <h3>{{ user.fullName }}</h3>
+              <p class="text-caption mt-1">
+                {{ user.email }}
+              </p>
+              <v-divider class="my-3"></v-divider>
+              <v-btn variant="text" rounded>Account Settings</v-btn>
+              <v-divider class="my-3"></v-divider>
+              <v-btn variant="text" rounded> Logout </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
+    </template>
+    <template #content>
+      <v-container fluid>
+        <v-layout>
+          <v-navigation-drawer expand-on-hover rail>
+            <v-list density="compact" nav>
+              <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles"></v-list-item>
+              <v-list-item
+                prepend-icon="mdi-account-multiple"
+                title="Shared with me"
+                value="shared"
+              ></v-list-item>
+              <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
+            </v-list>
+          </v-navigation-drawer>
 
-.form-container {
-  max-width: 500px;
-  margin: 0 auto;
-}
-</style>
+          <v-main style="height: 850px"></v-main>
+        </v-layout>
+      </v-container>
+    </template>
+  </AppLayout>
+</template>
