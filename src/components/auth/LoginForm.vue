@@ -4,9 +4,7 @@ import { requiredValidator, emailValidator, passwordValidator } from '@/utils/va
 import AlertNotification from '@/components/common/AlertNotification.vue'
 import { useLogin } from '@/composables/auth/login'
 
-// Use composable properly
 const { formData, formAction, refVForm, onFormSubmit } = useLogin()
-
 const visible = ref(false)
 </script>
 
@@ -14,31 +12,33 @@ const visible = ref(false)
   <AlertNotification
     :form-success-message="formAction.formSuccessMessage"
     :form-error-message="formAction.formErrorMessage"
-  ></AlertNotification>
+  />
 
   <v-form ref="refVForm" @submit.prevent="onFormSubmit">
     <v-text-field
       v-model="formData.email"
-      placeholder="Email address"
       label="Email"
-      density="compact"
+      placeholder="Email address"
       prepend-inner-icon="mdi-email-outline"
       variant="outlined"
+      density="comfortable"
       :rules="[requiredValidator, emailValidator]"
-    ></v-text-field>
+      hide-details="auto"
+    />
 
     <v-text-field
       v-model="formData.password"
+      label="Password"
+      placeholder="Enter your password"
+      prepend-inner-icon="mdi-lock-outline"
       :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
       :type="visible ? 'text' : 'password'"
-      density="compact"
-      placeholder="Enter your password"
-      label="Password"
-      prepend-inner-icon="mdi-lock-outline"
       variant="outlined"
+      density="comfortable"
       @click:append-inner="visible = !visible"
       :rules="[requiredValidator, passwordValidator]"
-    ></v-text-field>
+      hide-details="auto"
+    />
 
     <v-btn class="mt-2" type="submit" block color="red-darken-1" prepend-icon="mdi-login">
       Login

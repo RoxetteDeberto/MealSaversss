@@ -71,7 +71,7 @@ const { mobile } = useDisplay()
                     height="auto"
                   ></v-img>
                   <h3
-                    class="mt-2"
+                    class="mt-2 text-white"
                     style="
                       font-family: 'Playfair Display', serif;
                       font-weight: 500;
@@ -90,7 +90,7 @@ const { mobile } = useDisplay()
 
                 <v-card-text class="bg-white bg-opacity-75 rounded-lg pt-4">
                   <v-divider class="my-5"></v-divider>
-                  <v-sheet class="mx-auto" width="300">
+                  <v-sheet class="mx-auto" :width="mobile ? '100%' : 300" style="max-width: 100%">
                     <LoginForm />
                     <v-divider class="my-5"></v-divider>
                     <h5 class="text-center mb-5">
