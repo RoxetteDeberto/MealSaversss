@@ -16,6 +16,7 @@ const visible = ref(false)
 
   <v-form ref="refVForm" @submit.prevent="onFormSubmit">
     <v-text-field
+      class="pb-4"
       v-model="formData.email"
       label="Email"
       placeholder="Email address"

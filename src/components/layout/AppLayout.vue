@@ -3,10 +3,10 @@ import { ref } from 'vue'
 
 const theme = ref(localStorage.getItem('theme') ?? 'light')
 
-// function onClick() {
-//   theme.value = theme.value === 'light' ? 'dark' : 'light'
-//   localStorage.setItem('theme', theme.value)
-// }
+function onClick() {
+  theme.value = theme.value === 'light' ? 'dark' : 'light'
+  localStorage.setItem('theme', theme.value)
+}
 </script>
 
 <template>
@@ -15,12 +15,12 @@ const theme = ref(localStorage.getItem('theme') ?? 'light')
       <v-app-bar class="px-3" :color="theme === 'light' ? 'cyan-lighten-1' : 'cyan-darken-2'">
         <v-spacer></v-spacer>
 
-        <!-- <v-btn
+        <v-btn
           :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
           variant="elevated"
           slim
           @click="onClick"
-        ></v-btn> -->
+        ></v-btn>
       </v-app-bar>
       <v-main>
         <slot name="content"></slot>
@@ -29,13 +29,6 @@ const theme = ref(localStorage.getItem('theme') ?? 'light')
       <v-footer class="d-flex justify-end px-6" color="cyan-lighten-1" border app>
         <div class="text-right">
           <div class="text-body-2">© 2025 - MealSavers</div>
-          <div class="text-body-2">
-            <a href="mailto:mealsavers@gmail.com" class="d-inline-flex align-center gap-2">
-              <v-icon size="18">mdi-email</v-icon>
-              Roxette.Deberto@gmail.com
-            </a>
-          </div>
-          <div class="text-body-2"><v-icon size="18">mdi-phone</v-icon>+639086265486</div>
         </div>
       </v-footer>
     </v-app>
