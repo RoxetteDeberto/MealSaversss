@@ -30,7 +30,8 @@ export function useRegister() {
         data: {
           firstname: formData.value.firstname,
           lastname: formData.value.lastname,
-          is_admin: false,
+          // is_admin: false, just turn on for admin user
+          // role: 'Administrator' if role based
         },
       },
     })

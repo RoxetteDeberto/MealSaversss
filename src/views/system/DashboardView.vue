@@ -1,12 +1,15 @@
 <script setup>
 import AppLayout from '@/components/layout/AppLayout.vue'
-// import { ref } from 'vue'
+import SideNavigation from '@/components/layout/Navigation/SideNavigation.vue'
+import { ref } from 'vue'
 
 const user = {
   initials: 'JD',
   fullName: 'John Doe',
   email: 'john.doe@doe.com',
 }
+
+const isDrawerVisible = ref(true)
 </script>
 
 <template>
@@ -27,34 +30,32 @@ const user = {
                 <span class="text-h5">{{ user.initials }}</span>
               </v-avatar>
               <h3>{{ user.fullName }}</h3>
-              <p class="text-caption mt-1">
-                {{ user.email }}
-              </p>
+              <p class="text-caption mt-1">{{ user.email }}</p>
               <v-divider class="my-3"></v-divider>
               <v-btn variant="text" rounded>Account Settings</v-btn>
               <v-divider class="my-3"></v-divider>
-              <v-btn variant="text" rounded> Logout </v-btn>
+              <v-btn variant="text" rounded>Logout</v-btn>
             </div>
           </v-card-text>
         </v-card>
       </v-menu>
     </template>
-    <template #content>
-      <v-container fluid>
-        <v-layout>
-          <v-navigation-drawer expand-on-hover rail>
-            <v-list density="compact" nav>
-              <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles"></v-list-item>
-              <v-list-item
-                prepend-icon="mdi-account-multiple"
-                title="Shared with me"
-                value="shared"
-              ></v-list-item>
-              <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
-            </v-list>
-          </v-navigation-drawer>
 
-          <v-main style="height: 850px"></v-main>
+    <template #content>
+      <v-container fluid class="pa-0">
+        <v-layout>
+          <!-- Elegant Light Blue Sidebar as Component -->
+          <SideNavigation :isDrawerVisible="isDrawerVisible" />
+
+          <!-- Main Content Area -->
+          <v-main
+            style="
+              min-height: 100vh;
+              background: url('/images/LoginPageBG.png') center/cover no-repeat;
+            "
+          >
+            <router-view />
+          </v-main>
         </v-layout>
       </v-container>
     </template>
