@@ -7,6 +7,7 @@ import NotFoundView from '@/views/errors/NotFoundView.vue'
 import AccountSettings from '@/views/system/AccountSettings.vue'
 import HomeView from '@/components/system/dashboard/HomeView.vue'
 import AboutUsView from '@/components/system/dashboard/AboutUsView.vue'
+import AppLayout from '@/components/layout/AppLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,18 @@ const router = createRouter({
       path: '/accountsettings',
       name: 'accountsettings',
       component: AccountSettings,
+    },
+    {
+      path: '/',
+      component: AppLayout, // your dashboard layout
+      children: [
+        {
+          path: 'homeview',
+          name: 'HomeView',
+          component: () => import('@/components/system/dashboard/HomeView.vue'),
+        },
+        // other child routes...
+      ],
     },
   ],
 })
