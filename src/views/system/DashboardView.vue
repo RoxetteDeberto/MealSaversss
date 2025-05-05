@@ -1,60 +1,40 @@
 <script setup>
 import AppLayout from '@/components/layout/AppLayout.vue'
-import SideNavigation from '@/components/layout/Navigation/SideNavigation.vue'
+import ForbiddenView from '@/views/errors/ForbiddenView.vue'
+import NotFoundView from '@/views/errors/NotFoundView.vue'
 import { ref } from 'vue'
 
-const user = {
-  initials: 'JD',
-  fullName: 'John Doe',
-  email: 'john.doe@doe.com',
-}
-
+const showNotFound = ref(false) // Simulate route not found
+const hasAccess = ref(false) // Simulated access check
 const isDrawerVisible = ref(true)
+
+const initials = ref('')
+const fullName = ref('')
+const email = ref('')
 </script>
 
 <template>
   <AppLayout>
-    <template #avatar>
-      <v-menu min-width="200px">
-        <template v-slot:activator="{ props }">
-          <v-btn icon v-bind="props">
-            <v-avatar color="brown" size="large" class="me-5">
-              <span class="text-h5">{{ user.initials }}</span>
-            </v-avatar>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-text>
-            <div class="mx-auto text-center">
-              <v-avatar color="brown" class="me-5">
-                <span class="text-h5">{{ user.initials }}</span>
-              </v-avatar>
-              <h3>{{ user.fullName }}</h3>
-              <p class="text-caption mt-1">{{ user.email }}</p>
-              <v-divider class="my-3"></v-divider>
-              <v-btn variant="text" rounded>Account Settings</v-btn>
-              <v-divider class="my-3"></v-divider>
-              <v-btn variant="text" rounded>Logout</v-btn>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-menu>
-    </template>
-
-    <template #content>
+    <template #default>
       <v-container fluid class="pa-0">
         <v-layout>
-          <!-- Elegant Light Blue Sidebar as Component -->
-          <SideNavigation :isDrawerVisible="isDrawerVisible" />
+          <SideNavigation v-if="hasAccess" :isDrawerVisible="isDrawerVisible" />
 
-          <!-- Main Content Area -->
           <v-main
             style="
               min-height: 100vh;
               background: url('/images/LoginPageBG.png') center/cover no-repeat;
             "
           >
-            <router-view />
+            <ForbiddenView v-if="!hasAccess && !showNotFound" />
+            <NotFoundView v-if="showNotFound" />
+            <div v-else class="pa-4">
+              <p>Initials: {{ initials }}</p>
+              <p>Full Name: {{ fullName }}</p>
+              <p>Email: {{ email }}</p>
+
+              <router-view />
+            </div>
           </v-main>
         </v-layout>
       </v-container>

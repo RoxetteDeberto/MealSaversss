@@ -4,59 +4,53 @@ import { ref } from 'vue'
 
 // by convention, composable function names start with "use"
 export function useLogin() {
+  // Utilize pre-defined vue functions
   const router = useRouter()
 
+  // Load Variables
   const formDataDefault = {
     email: '',
     password: '',
   }
-
-  const formData = ref({ ...formDataDefault })
-  const formAction = ref({ ...formActionDefault })
+  const formData = ref({
+    ...formDataDefault,
+  })
+  const formAction = ref({
+    ...formActionDefault,
+  })
   const refVForm = ref()
 
-  const login = async () => {
-    const { email, password } = {
-      email: formData.value.email.trim(),
+  const onSubmit = async () => {
+    // Reset Form Action utils; Turn on processing at the same time
+    formAction.value = { ...formActionDefault, formProcess: true }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: formData.value.email,
       password: formData.value.password,
+    })
+
+    if (error) {
+      // Add Error Message and Status Code
+      formAction.value.formErrorMessage = error.message
+      formAction.value.formStatus = error.status
+    } else if (data) {
+      // Add Success Message
+      formAction.value.formSuccessMessage = 'Successfully Logged Account.'
+      // Redirect Acct to Dashboard
+      router.replace('/dashboard')
     }
 
-    try {
-      formAction.value = { ...formActionDefault, formProcess: true }
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) {
-        console.error('Supabase login error:', error)
-        formAction.value.formErrorMessage = error.message
-        formAction.value.formStatus = error.status
-      } else if (data) {
-        formAction.value.formSuccessMessage = 'Successfully Logged Account.'
-        router.push('/dashboard')
-      }
-    } catch (err) {
-      console.error('Login error:', err)
-      formAction.value.formErrorMessage = 'An unexpected error occurred.'
-    } finally {
-      refVForm.value?.reset()
-      formAction.value.formProcess = false
-    }
+    // Reset Form
+    refVForm.value?.reset()
+    // Turn off processing
+    formAction.value.formProcess = false
   }
 
   const onFormSubmit = () => {
     refVForm.value?.validate().then(({ valid }) => {
-      if (valid) login()
+      if (valid) onSubmit()
     })
   }
 
-  return {
-    formData,
-    formAction,
-    refVForm,
-    login,
-    onFormSubmit,
-  }
+  return { formData, formAction, refVForm, onFormSubmit }
 }

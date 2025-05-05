@@ -77,7 +77,7 @@ const { mobile } = useDisplay()
             </v-card-title>
 
             <v-card-text class="bg-white bg-opacity-75 rounded-lg pt-4">
-              <v-divider class="my-5"></v-divider>
+              <v-divider class="my-5"> </v-divider>
               <v-sheet class="mx-auto" :width="mobile ? '100%' : 300" style="max-width: 100%">
                 <LoginForm />
                 <v-divider class="my-5"></v-divider>
