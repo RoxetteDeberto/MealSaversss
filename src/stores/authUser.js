@@ -5,12 +5,14 @@ import { defineStore } from 'pinia'
 export const useAuthUserStore = defineStore('authUser', () => {
   // States
   const userData = ref(null)
+
   const authPages = ref([])
   const authBranchIds = ref([])
 
   // Getters
   // Computed Properties; Use for getting the state but not modifying its reactive state
   const userRole = computed(() => {
+    if (!userData.value) return null
     return userData.value?.is_admin ? 'Super Administrator' : userData.value.user_role
   })
 

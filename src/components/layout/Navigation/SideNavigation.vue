@@ -59,7 +59,8 @@ onMounted(() => {
     style="background-color: #b2ebf2"
   >
     <v-list nav>
-      <v-list-item prepend-icon="mdi-home" title="Home" subtitle="About Us" to="/"></v-list-item>
+      <v-list-item prepend-icon="mdi-home" title="Home" to="/homeview"></v-list-item>
+      <v-list-item prepend-icon="mdi-information" title="About Us" to="/aboutusview"></v-list-item>
 
       <v-list-item prepend-icon="mdi-hand-heart" title="Donations" to="/donations"></v-list-item>
 
