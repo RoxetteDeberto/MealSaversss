@@ -26,10 +26,12 @@ onMounted(async () => {
   isMobileLogged.value = mobile.value && isLoggedIn.value
 })
 </script>
-
 <template>
-  <v-app :theme="theme">
-    <!-- Top Frosted App Bar -->
+  <v-app :theme="theme" style="background-color: #f5f5dc">
+    <!-- Side Navigation -->
+    <SideNavigation v-if="isLoggedIn" :isDrawerVisible="true" />
+
+    <!-- Top App Bar -->
     <v-app-bar
       v-if="isLoggedIn"
       color="transparent"
@@ -37,33 +39,21 @@ onMounted(async () => {
       class="elevation-2"
       style="backdrop-filter: blur(10px)"
     >
-      <!-- Left Side: Title "MealSavers" -->
       <v-btn variant="text" class="text-h6 font-weight-bold text-white" href="#">
         MealSavers
       </v-btn>
-
       <v-spacer />
-
-      <SideNavigation></SideNavigation>
-
-      <!-- Right Side: Profile Photo and Dark Mode -->
       <div class="d-flex align-center">
-        <!-- User's Profile Picture -->
         <v-avatar size="40" class="me-2">
           <v-img :src="authStore.userData.image_url || '/images/img-profile.png'" />
         </v-avatar>
       </div>
     </v-app-bar>
 
-    <!-- Page Content -->
-    <v-main
-      class="bg-cover"
-      style="background: url('/images/LoginPageBG.png') center/cover no-repeat; min-height: 100vh"
-    >
-      <slot name="content" />
-    </v-main>
+    <!-- Page Content Slot -->
+    <slot name="content" />
 
-    <!-- Floating Dark Mode Toggle Button -->
+    <!-- Dark Mode Toggle -->
     <v-btn
       icon
       @click="onToggleTheme"
@@ -78,7 +68,7 @@ onMounted(async () => {
       </v-icon>
     </v-btn>
 
-    <!-- Bottom nav for mobile -->
+    <!-- Bottom Navigation for Mobile -->
     <BottomNavigation v-if="isMobileLogged" />
   </v-app>
 </template>
