@@ -41,7 +41,7 @@ export function useRegister() {
       formAction.value.formStatus = error.status
     } else if (data) {
       formAction.value.formSuccessMessage = 'Successfully Registered Account.'
-      router.replace('/dashboard') // Redirect to Dashboard
+      router.replace('/') // Redirect to Login page
     }
 
     refVForm.value?.reset()

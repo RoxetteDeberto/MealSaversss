@@ -36,8 +36,8 @@ export function useLogin() {
     } else if (data) {
       // Add Success Message
       formAction.value.formSuccessMessage = 'Successfully Logged Account.'
-      // Redirect Acct to Dashboard
-      router.replace('/dashboard')
+      // Redirect Acct to HomeView
+      router.replace('/homeview')
     }
 
     // Reset Form

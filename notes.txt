@@ -1,0 +1,25 @@
+Project Overview:
+This is a food donation platform called "MealSavers" with the following key features:
+Core Concept: A platform connecting businesses and households with surplus food to low-income families and organizations.
+Key Features:
+User Management:
+User authentication (login/register)
+Role-based access control (Super Administrator, regular users)
+Profile management with image uploads
+Inventory Management:
+Stock management system
+Sales tracking
+Product segregation
+Branch management
+Database Structure (based on the code):
+user_roles - Manages user permissions and access levels
+branches - Stores information about different locations
+products - Manages food items and their details
+stock_ins - Tracks incoming inventory
+sale_products - Records sales transactions
+Technical Stack:
+Frontend: Vue.js 3 with Vuetify for UI components
+Backend: Supabase (PostgreSQL database with real-time capabilities)
+Authentication: Supabase Auth
+State Management: Pinia
+Routing: Vue Router

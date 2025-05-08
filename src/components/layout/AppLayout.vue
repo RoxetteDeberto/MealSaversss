@@ -1,7 +1,7 @@
 <script setup>
-import BottomNavigation from '@/components/layout/navigation/BottomNavigation.vue'
-// import TopProfileNavigation from '@/components/layout/navigation/TopProfileNavigation.vue'
-import SideNavigation from '@/components/layout/navigation/SideNavigation.vue'
+import BottomNavigation from '@/components/layout/Navigation/BottomNavigation.vue'
+// import TopProfileNavigation from '@/components/layout/Navigation/TopProfileNavigation.vue'
+import SideNavigation from '@/components/layout/Navigation/SideNavigation.vue'
 import { useAuthUserStore } from '@/stores/authUser'
 import { onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
@@ -39,8 +39,11 @@ onMounted(async () => {
       class="elevation-2"
       style="backdrop-filter: blur(10px)"
     >
-      <v-btn variant="text" class="text-h6 font-weight-bold text-white" href="#">
-        MealSavers
+      <v-btn variant="text" class="text-h6 font-weight-bold" :class="theme === 'dark' ? 'text-white' : 'text-brown-darken-2'" href="#">
+        <div class="d-flex align-center">
+          <v-img src="/images/bear.jpg" alt="Bear Logo" width="36" height="36" class="me-2" style="border-radius: 50%; box-shadow: 0 2px 8px rgba(109,76,65,0.10); background: #fffbe6;" />
+          MealSavers
+        </div>
       </v-btn>
       <v-spacer />
       <div class="d-flex align-center">
@@ -54,7 +57,7 @@ onMounted(async () => {
     <slot name="content" />
 
     <!-- Dark Mode Toggle -->
-    <v-btn
+    <!-- <v-btn
       icon
       @click="onToggleTheme"
       class="position-fixed"
@@ -66,9 +69,42 @@ onMounted(async () => {
       <v-icon>
         {{ theme === 'dark' ? 'mdi-white-balance-sunny' : 'mdi-weather-night' }}
       </v-icon>
-    </v-btn>
+    </v-btn> -->
 
     <!-- Bottom Navigation for Mobile -->
     <BottomNavigation v-if="isMobileLogged" />
   </v-app>
 </template>
+
+<style scoped>
+.logo-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.logo-container.dark-bg {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.logo-image {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.v-app-bar {
+  backdrop-filter: blur(10px);
+}
+
+.v-btn {
+  text-transform: none !important;
+  letter-spacing: 0.5px;
+}
+
+.v-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.v-btn:hover .v-icon {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+</style>

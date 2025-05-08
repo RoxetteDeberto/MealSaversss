@@ -1,5 +1,5 @@
 <script setup>
-import SideNavigation from '@/components/layout/navigation/SideNavigation.vue'
+import SideNavigation from '@/components/layout/Navigation/SideNavigation.vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import { useAuthUserStore } from '@/stores/authUser'
 import { onMounted, ref, computed } from 'vue'

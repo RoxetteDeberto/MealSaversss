@@ -1,10 +1,12 @@
 import { supabase } from '@/utils/supabase'
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { useRouter } from 'vue-router'
 
 export const useAuthUserStore = defineStore('authUser', () => {
   // States
   const userData = ref(null)
+  const router = useRouter()
 
   const authPages = ref([])
   const authBranchIds = ref([])
@@ -70,6 +72,17 @@ export const useAuthUserStore = defineStore('authUser', () => {
     authBranchIds.value = data.map((b) => b.id)
   }
 
+  // Logout function
+  async function logout() {
+    try {
+      await supabase.auth.signOut()
+      $reset()
+      router.replace('/')
+    } catch (error) {
+      console.error('Error during logout:', error)
+    }
+  }
+
   // Update User Information
   async function updateUserInformation(updatedData) {
     const {
@@ -133,6 +146,7 @@ export const useAuthUserStore = defineStore('authUser', () => {
     getUserInformation,
     getAuthPages,
     getAuthBranchIds,
+    logout,
     updateUserInformation,
     updateUserImage,
   }

@@ -1,10 +1,22 @@
 import { createClient } from '@supabase/supabase-js'
 // Create a single supabase client for interacting with your database
 
-export const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-)
+// Validate environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseServiceRole = import.meta.env.VITE_SUPABASE_SERVICE_ROLE
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Missing required Supabase environment variables. Please check your .env file.')
+  throw new Error('Missing required Supabase environment variables')
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+})
 
 export const isAuthenticated = async () => {
   const { data, error } = await supabase.auth.getSession()
@@ -16,16 +28,14 @@ export const isAuthenticated = async () => {
 }
 
 // 👉 Create a single supabase admin client for interacting auth users
-export const supabaseAdmin = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_SERVICE_ROLE,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  },
-)
+export const supabaseAdmin = supabaseServiceRole
+  ? createClient(supabaseUrl, supabaseServiceRole, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    })
+  : null
 
 // 👉 Form Action utils
 export const formActionDefault = {
