@@ -1,19 +1,30 @@
 <script setup>
-import BottomNavigation from '@/components/layout/Navigation/BottomNavigation.vue'
+// import BottomNavigation from '@/components/layout/Navigation/BottomNavigation.vue'
 // import TopProfileNavigation from '@/components/layout/Navigation/TopProfileNavigation.vue'
 import SideNavigation from '@/components/layout/Navigation/SideNavigation.vue'
 import { useAuthUserStore } from '@/stores/authUser'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useDisplay } from 'vuetify'
+import { getAvatarText } from '@/utils/helpers'
 
 const emit = defineEmits(['theme'])
 
 const { mobile } = useDisplay()
 const authStore = useAuthUserStore()
 
-const isLoggedIn = ref(false)
-const isMobileLogged = ref(false)
+const isLoggedIn = computed(() => {
+  return !!authStore.userData
+})
+
+const isMobile = computed(() => {
+  return mobile.value
+})
+
 const theme = ref(localStorage.getItem('theme') ?? 'light')
+const isDrawerVisible = ref(!mobile.value)
+const formAction = ref({
+  formProcess: false
+})
 
 const onToggleTheme = () => {
   theme.value = theme.value === 'light' ? 'dark' : 'light'
@@ -21,15 +32,21 @@ const onToggleTheme = () => {
   emit('theme', theme.value)
 }
 
+const onLogout = async () => {
+  formAction.value.formProcess = true
+  await authStore.logout()
+  formAction.value.formProcess = false
+}
+
 onMounted(async () => {
   isLoggedIn.value = await authStore.isAuthenticated()
-  isMobileLogged.value = mobile.value && isLoggedIn.value
+  isDrawerVisible.value = !mobile.value
 })
 </script>
 <template>
   <v-app :theme="theme" style="background-color: #f5f5dc">
     <!-- Side Navigation -->
-    <SideNavigation v-if="isLoggedIn" :isDrawerVisible="true" />
+    <SideNavigation v-if="isLoggedIn" :isDrawerVisible="isDrawerVisible" />
 
     <!-- Top App Bar -->
     <v-app-bar
@@ -39,6 +56,12 @@ onMounted(async () => {
       class="elevation-2"
       style="backdrop-filter: blur(10px)"
     >
+      <v-app-bar-nav-icon
+        v-if="isMobile"
+        @click="isDrawerVisible = !isDrawerVisible"
+        class="d-flex d-md-none"
+      ></v-app-bar-nav-icon>
+      
       <v-btn variant="text" class="text-h6 font-weight-bold" :class="theme === 'dark' ? 'text-white' : 'text-brown-darken-2'" href="#">
         <div class="d-flex align-center">
           <v-img src="/images/bear.jpg" alt="Bear Logo" width="36" height="36" class="me-2" style="border-radius: 50%; box-shadow: 0 2px 8px rgba(109,76,65,0.10); background: #fffbe6;" />
@@ -47,9 +70,66 @@ onMounted(async () => {
       </v-btn>
       <v-spacer />
       <div class="d-flex align-center">
-        <v-avatar size="40" class="me-2">
-          <v-img :src="authStore.userData.image_url || '/images/img-profile.png'" />
-        </v-avatar>
+        <v-menu min-width="200px" rounded>
+          <template #activator="{ props }">
+            <v-btn icon v-bind="props">
+              <v-avatar
+                v-if="authStore.userData?.image_url"
+                :image="authStore.userData.image_url"
+                color="brown-darken-2"
+                size="40"
+              ></v-avatar>
+              <v-avatar v-else color="brown-darken-2" size="40">
+                <span class="text-h6 text-white">
+                  {{ getAvatarText(authStore.userData?.firstname + ' ' + authStore.userData?.lastname) }}
+                </span>
+              </v-avatar>
+            </v-btn>
+          </template>
+
+          <v-card class="mt-1">
+            <v-card-text>
+              <v-list>
+                <v-list-item
+                  :subtitle="authStore.userData?.email"
+                  :title="authStore.userData?.firstname + ' ' + authStore.userData?.lastname"
+                >
+                  <template #prepend>
+                    <v-avatar
+                      v-if="authStore.userData?.image_url"
+                      :image="authStore.userData.image_url"
+                      color="brown-darken-2"
+                      size="40"
+                    ></v-avatar>
+                    <v-avatar v-else color="brown-darken-2" size="40">
+                      <span class="text-h6 text-white">
+                        {{ getAvatarText(authStore.userData?.firstname + ' ' + authStore.userData?.lastname) }}
+                      </span>
+                    </v-avatar>
+                  </template>
+                </v-list-item>
+              </v-list>
+
+              <v-divider class="my-3"></v-divider>
+
+              <v-btn prepend-icon="mdi-wrench" variant="plain" to="/accountsettings">
+                Account Settings
+              </v-btn>
+
+              <v-divider class="my-3"></v-divider>
+
+              <v-btn
+                prepend-icon="mdi-logout"
+                variant="plain"
+                @click="onLogout"
+                :loading="formAction.formProcess"
+                :disabled="formAction.formProcess"
+              >
+                Logout
+              </v-btn>
+            </v-card-text>
+          </v-card>
+        </v-menu>
       </div>
     </v-app-bar>
 
@@ -70,9 +150,6 @@ onMounted(async () => {
         {{ theme === 'dark' ? 'mdi-white-balance-sunny' : 'mdi-weather-night' }}
       </v-icon>
     </v-btn> -->
-
-    <!-- Bottom Navigation for Mobile -->
-    <BottomNavigation v-if="isMobileLogged" />
   </v-app>
 </template>
 
@@ -92,6 +169,11 @@ onMounted(async () => {
 
 .v-app-bar {
   backdrop-filter: blur(10px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .v-btn {
@@ -106,5 +188,32 @@ onMounted(async () => {
 .v-btn:hover .v-icon {
   transform: scale(1.1);
   transition: transform 0.3s ease;
+}
+
+/* Add responsive styles */
+@media (max-width: 600px) {
+  .v-app-bar {
+    padding: 0 8px;
+  }
+  
+  .v-btn {
+    padding: 0 8px;
+  }
+  
+  .v-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+/* Ensure content doesn't get hidden behind the app bar */
+.v-main {
+  padding-top: 64px !important;
+}
+
+@media (max-width: 600px) {
+  .v-main {
+    padding-top: 56px !important;
+  }
 }
 </style>
