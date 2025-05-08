@@ -111,28 +111,56 @@ export const useAuthUserStore = defineStore('authUser', () => {
 
   // Update User Profile Image
   async function updateUserImage(file) {
-    // Get the file extension from the uploaded file
-    // const fileExtension = file.name.split('.').pop()
+    try {
+      if (!file) {
+        return { error: { message: 'No file provided' } }
+      }
 
-    // Upload the file with the user ID and file extension
-    const { data, error } = await supabase.storage
-      .from('shirlix')
-      .upload('avatars/' + userData.value.id + '-avatar.png', file, {
-        cacheControl: '3600',
-        upsert: true,
+      // Create a unique filename using user ID and timestamp
+      const timestamp = new Date().getTime()
+      const filePath = `avatars/${userData.value.id}/${timestamp}-avatar.png`
+
+      // Upload the file
+      const { data, error: uploadError } = await supabase.storage
+        .from('profile-pictures')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true,
+        })
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError)
+        return { error: uploadError }
+      }
+
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('profile-pictures')
+        .getPublicUrl(filePath)
+
+      // Update user metadata with the new image URL
+      const { data: updateData, error: updateError } = await supabase.auth.updateUser({
+        data: { 
+          ...userData.value,
+          image_url: publicUrl 
+        }
       })
 
-    // Check if it has error
-    if (error) {
-      return { error }
-    }
-    // If no error set data to userData state with the image_url
-    else if (data) {
-      // Retrieve Image Public Url
-      const { data: imageData } = supabase.storage.from('shirlix').getPublicUrl(data.path)
+      if (updateError) {
+        console.error('Update error:', updateError)
+        return { error: updateError }
+      }
 
-      // Update the user information with the new image_url
-      return await updateUserInformation({ ...userData.value, image_url: imageData.publicUrl })
+      // Update local state
+      userData.value = { 
+        ...userData.value,
+        image_url: publicUrl 
+      }
+
+      return { data: updateData }
+    } catch (error) {
+      console.error('Profile image update error:', error)
+      return { error }
     }
   }
 

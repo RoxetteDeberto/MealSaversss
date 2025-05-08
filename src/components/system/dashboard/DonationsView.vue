@@ -140,7 +140,7 @@
                           :color="getStatusColor(item.status)"
                           size="small"
                         >
-                          {{ item.status }}
+                          {{ item.status.charAt(0).toUpperCase() + item.status.slice(1) }}
                         </v-chip>
                       </td>
                       <td class="text-right">
@@ -289,9 +289,10 @@ const formatDate = (date) => {
 // Get status color helper
 const getStatusColor = (status) => {
   const colors = {
-    'Completed': 'success',
-    'Pending': 'warning',
-    'Cancelled': 'error'
+    'available': 'info',
+    'claimed': 'success',
+    'pending': 'warning',
+    'cancelled': 'error'
   }
   return colors[status] || 'grey'
 }
@@ -351,7 +352,12 @@ const fetchDonations = async () => {
         *,
         charities (
           name,
-          description
+          description,
+          image_url
+        ),
+        users (
+          firstname,
+          lastname
         )
       `)
       .eq('user_id', authStore.userData.id)
@@ -442,7 +448,7 @@ const handleSubmit = async () => {
         type: donation.value.type,
         amount: parseFloat(donation.value.amount),
         description: donation.value.description,
-        status: 'pending'
+        status: 'available'
       });
 
       // Insert donation
@@ -455,7 +461,7 @@ const handleSubmit = async () => {
             type: donation.value.type,
             amount: parseFloat(donation.value.amount),
             description: donation.value.description,
-            status: 'pending'
+            status: 'available'
           }
         ])
         .select()
@@ -474,8 +480,8 @@ const handleSubmit = async () => {
         .insert([
           {
             donation_id: donationData.id,
-            status: 'pending',
-            notes: 'Donation created'
+            status: 'available',
+            notes: 'Donation created and available for claiming'
           }
         ])
 

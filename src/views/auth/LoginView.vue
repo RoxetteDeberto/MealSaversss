@@ -61,6 +61,16 @@ const { mobile } = useDisplay()
                     >Click here to Register</RouterLink
                   >
                 </h5>
+                <v-btn
+                  color="brown-darken-2"
+                  variant="outlined"
+                  block
+                  class="mt-2"
+                  to="/claims"
+                >
+                  <v-icon start>mdi-food</v-icon>
+                  View Available Donations
+                </v-btn>
               </v-sheet>
             </v-card-text>
           </v-card>

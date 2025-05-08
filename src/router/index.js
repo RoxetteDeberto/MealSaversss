@@ -11,6 +11,7 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import DonationsView from '@/components/system/dashboard/DonationsView.vue'
 import CharitiesView from '@/views/system/CharitiesView.vue'
 import ProfileView from '@/views/system/ProfileView.vue'
+import ClaimsView from '@/views/system/ClaimsView.vue'
 import { useAuthUserStore } from '@/stores/authUser'
 
 const router = createRouter({
@@ -73,6 +74,12 @@ const router = createRouter({
       name: 'donations',
       component: DonationsView,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/claims',
+      name: 'claims',
+      component: ClaimsView,
+      meta: { requiresGuest: true }
     },
   ],
 })
